@@ -8,4 +8,4 @@ To use the software you just have to:
 3) Run 'base_script.py'
 4) Enjoy!
 
-Script created by Eduard-Gabriel Poesina
+Script created by Eduard6421
