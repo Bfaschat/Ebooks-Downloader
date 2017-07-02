@@ -9,6 +9,7 @@ from urllib import request as urlrequest
 
 
 
+
 proxy_host = '212.237.50.24:3128'
 
 directory = os.path.dirname(__file__)
@@ -46,8 +47,6 @@ def get_book_links(f):
 
 def download_books(f):
     for line in f:
-        g = open('missing_books.txt', 'a+')
-
         line = line.strip('\n')
         url = line
 
@@ -63,15 +62,31 @@ def download_books(f):
 
         book_name = book_link.split('/')[-1]
 
+
         request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
         request.set_proxy(proxy_host, 'http')
 
         complete_name = os.path.join(book_path,book_name)
 
-        out_file = open(complete_name,'wb')
-        shutil.copyfileobj(response,out_file)
-        print(book_name)
+        book_link = book_link.replace(' ','%20')
 
+
+
+        try:
+            response = urlrequest.urlopen(book_link)
+            out_file = open(complete_name, 'wb')
+            shutil.copyfileobj(response,out_file)
+            print('hit')
+        except:
+            g = open('missing_books.txt', 'a+')
+            g.write(book_name + '\n' + book_link + '\n')
+            g.close()
+            print('escaped')
+            print(book_name)
+
+
+
+    f.close()
 
 
 threads =[]
