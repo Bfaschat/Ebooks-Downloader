@@ -77,7 +77,7 @@ def download_books(f):
 
 threads =[]
 
-for x in range(1,3):
+for x in range(1,63): 
 
      pack = os.path.join(packet_path,'pack' + str(x) + '.txt')
      file = open(pack,'r')
