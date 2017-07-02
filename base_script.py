@@ -14,6 +14,9 @@ proxy_host = '212.237.50.24:3128'
 
 directory = os.path.dirname(__file__)
 
+if not os.path.exists('Books'):
+	os.makedirs('Books')
+
 book_path   = os.path.join(directory,'Books')
 packet_path = os.path.join(directory,'Packet Path')
 
