@@ -8,6 +8,4 @@ To use the software you just have to:
 3) Run 'base_script.py'; 
 4) Enjoy!
 
-!Some books may not have been downloaded for various reasons. The missing books titles can be found in missing_books.txt!
-
 Script created by Eduard6421
