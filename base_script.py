@@ -9,7 +9,6 @@ from urllib import request as urlrequest
 
 
 
-
 proxy_host = '212.237.50.24:3128'
 
 directory = os.path.dirname(__file__)
@@ -64,24 +63,20 @@ def download_books(f):
 
         book_name = book_link.split('/')[-1]
 
-        try :
-            request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
-            request.set_proxy(proxy_host, 'http')
+        request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
+        request.set_proxy(proxy_host, 'http')
 
-            complete_name = os.path.join(book_path,book_name)
+        complete_name = os.path.join(book_path,book_name)
 
-            with urlrequest.urlopen(book_link)  as response, open(complete_name,'wb') as out_file:
-                shutil.copyfileobj(response,out_file)
-                print(book_name)
+        out_file = open(complete_name,'wb')
+        shutil.copyfileobj(response,out_file)
+        print(book_name)
 
-        except :
-            g.write(book_name+'\n')
-            g.close()
 
 
 threads =[]
 
-for x in range(1,63): 
+for x in range(1,63):
 
      pack = os.path.join(packet_path,'pack' + str(x) + '.txt')
      file = open(pack,'r')
