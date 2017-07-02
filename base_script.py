@@ -1,6 +1,7 @@
 import time
 import threading
 import bs4
+import lxml
 import shutil
 import os
 
@@ -11,8 +12,10 @@ g = open('missing_books.txt','a+')
 
 proxy_host = '212.237.50.24:3128'
 
-book_path   = 'E:\Projects\EBook Downloader Script\Books'
-packet_path = 'E:\Projects\EBook Downloader Script\Packet Path'
+directory = os.path.dirname(__file__)
+
+book_path   = os.path.join(directory,'Books')
+packet_path = os.path.join(directory,'Packet Path')
 
 
 def get_book_links(f):
@@ -41,42 +44,37 @@ def get_book_links(f):
 
 def download_books(f):
     for line in f:
+
         line = line.strip('\n')
         url = line
 
         request = urlrequest.Request(url,data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
         request.set_proxy(proxy_host, 'http')
 
-        try:
-            response = urlrequest.urlopen(request)
-            soup  = bs4.BeautifulSoup(response,'lxml')
 
-            book_link = soup.find('span',class_= 'download-links')
-            book_link = book_link.find('a')['href']
+        response = urlrequest.urlopen(request)
+        soup  = bs4.BeautifulSoup(response,'lxml')
 
-            book_name = book_link.split('/')[-1]
+        book_link = soup.find('span',class_= 'download-links')
+        book_link = book_link.find('a')['href']
 
-            request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
-            request.set_proxy(proxy_host, 'http')
+        book_name = book_link.split('/')[-1]
 
-            complete_name = os.path.join(book_path,book_name)
+        request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
+        request.set_proxy(proxy_host, 'http')
 
+        complete_name = os.path.join(book_path,book_name)
 
-            with urlrequest.urlopen(book_link)  as response, open(complete_name,'wb') as out_file:
-                shutil.copyfileobj(response,out_file)
-
-        except:
-            g.write(url + '\n')
-
-        print(f.name)
+        with urlrequest.urlopen(book_link)  as response, open(complete_name,'wb') as out_file:
+            shutil.copyfileobj(response,out_file)
+            print(book_name)
 
     f.close()
 
 
 threads =[]
 
-
-for x in range(1,33):
+for x in range(1,3):
 
      pack = os.path.join(packet_path,'pack' + str(x) + '.txt')
      file = open(pack,'r')
@@ -88,4 +86,3 @@ for x in range(1,33):
 
 for thread in threads :
      thread.join()
-
