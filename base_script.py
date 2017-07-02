@@ -7,7 +7,7 @@ import os
 
 from urllib import request as urlrequest
 
-g = open('missing_books.txt','a+')
+
 
 
 proxy_host = '212.237.50.24:3128'
@@ -47,6 +47,7 @@ def get_book_links(f):
 
 def download_books(f):
     for line in f:
+        g = open('missing_books.txt', 'a+')
 
         line = line.strip('\n')
         url = line
@@ -63,16 +64,19 @@ def download_books(f):
 
         book_name = book_link.split('/')[-1]
 
-        request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
-        request.set_proxy(proxy_host, 'http')
+        try :
+            request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
+            request.set_proxy(proxy_host, 'http')
 
-        complete_name = os.path.join(book_path,book_name)
+            complete_name = os.path.join(book_path,book_name)
 
-        with urlrequest.urlopen(book_link)  as response, open(complete_name,'wb') as out_file:
-            shutil.copyfileobj(response,out_file)
-            print(book_name)
+            with urlrequest.urlopen(book_link)  as response, open(complete_name,'wb') as out_file:
+                shutil.copyfileobj(response,out_file)
+                print(book_name)
 
-    f.close()
+        except :
+            g.write(book_name+'\n')
+            g.close()
 
 
 threads =[]
