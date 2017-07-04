@@ -25,7 +25,7 @@ def get_book_links(f):
 
      url = 'http://www.allitebooks.com/page/'
 
-     for x in range(1,718 ):
+     for x in range(1,720 ):
           page_number = str(x)
 
           request = urlrequest.Request(url+page_number+'/',data=None,headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
