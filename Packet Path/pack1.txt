@@ -18,7 +18,7 @@ http://www.allitebooks.com/hcna-networking-study-guide/
 http://www.allitebooks.com/implementing-an-advanced-server-infrastructure/
 http://www.allitebooks.com/home-networking-for-dummies-4th-edition/
 http://www.allitebooks.com/enabling-programmable-self-with-healthvault/
-http://www.allitebooks.com/professional-c-6-and-net-core-1-0/ //---------------------------------------------------------
+http://www.allitebooks.com/professional-c-6-and-net-core-1-0/
 http://www.allitebooks.com/programming-languages-for-mis/
 http://www.allitebooks.com/ibatis-in-action/
 http://www.allitebooks.com/dsls-in-action/
