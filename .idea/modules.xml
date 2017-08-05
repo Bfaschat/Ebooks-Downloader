@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/EBook Downloader Script.iml" filepath="$PROJECT_DIR$/.idea/EBook Downloader Script.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Ebooks-Downloader.iml" filepath="$PROJECT_DIR$/.idea/Ebooks-Downloader.iml" />
     </modules>
   </component>
 </project>
