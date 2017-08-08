@@ -150,8 +150,8 @@ def download_books():
 		 thread.join()
 
 
-#page_number = int(get_page_number())
+page_number = int(get_page_number())
 
-#get_book_links(page_number)
+get_book_links(page_number)
 
 download_books()
