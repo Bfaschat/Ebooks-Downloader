@@ -9,7 +9,7 @@ from urllib import request as urlrequest
 
 
 url = 'http://www.allitebooks.com/'
-proxy_host = '94.177.180.226:80'
+proxy_host = '178.22.117.153:53281'
 
 directory = os.path.dirname(__file__)
 
@@ -46,7 +46,7 @@ def get_book_links(page_number):
 	
 	for x in range(1,page_number+1):
 
-		
+
 			page_number = str(x)
 
 			request = urlrequest.Request(url+'/page/'+page_number+'/',data=None,headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
@@ -58,6 +58,7 @@ def get_book_links(page_number):
 			for element in soup.find_all('article'):
 				link = element.find('h2').find('a')
 				out_file.write((link['href'])+'\n')
+				print(link['href'])
 
 			
 			try:
@@ -65,7 +66,7 @@ def get_book_links(page_number):
 			except:
 				pass
 
-			if(x%100 == 0):
+			if(x%50 == 0):
 				out_file.close()
 				packet_number +=1
 				packet_file = os.path.join(packet_path,'Packet ' + str(packet_number) +'.txt')
@@ -73,8 +74,9 @@ def get_book_links(page_number):
 
 
 
-def copy_books(f):
+def copy_books(f,x):
 	for line in f:
+		original_line = line;
 		line = line.strip('\n')
 		url = line
 
@@ -84,41 +86,49 @@ def copy_books(f):
 
 		response = urlrequest.urlopen(request)
 		soup  = bs4.BeautifulSoup(response,'lxml')
-
 		book_link = soup.find('span',class_= 'download-links')
-		book_link = book_link.find('a')['href']
-
-		book_name = book_link.split('/')[-1]
-
-
-		request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
-		request.set_proxy(proxy_host, 'http')
-		complete_name = os.path.join(book_path,book_name)
-
-		book_link = book_link.replace(' ','%20')
+			
+		if book_link is not None:
+			book_link = book_link.find('a')['href']
+			book_name = book_link.split('/')[-1]
 
 
+			request = urlrequest.Request(book_link, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
+			request.set_proxy(proxy_host, 'http')
+			complete_name = os.path.join(book_path,book_name)
 
-		try:
-			response = urlrequest.urlopen(book_link)
-			out_file = open(complete_name, 'wb')
-			shutil.copyfileobj(response,out_file)
-			print('Hit')
-		except:
+			book_link = book_link.replace(' ','%20')
+
+			try:
+				response = urlrequest.urlopen(book_link)
+				out_file = open(complete_name, 'wb')
+				shutil.copyfileobj(response,out_file)
+				print('Hit in thread ',x)
+			except:
+				g = open('missing_books.txt', 'a+')
+				g.write(book_name + '\n' + book_link + '\n')
+				g.close()
+				print('Escaped')
+				print(book_name)
+
+		else:
+			book_name = soup.find('h1',class_='entry-title')
+			book_name = book_name.contents[0]
+			
+			book_name = book_name.lstrip()
+			book_name = book_name.rstrip()
+
 			g = open('missing_books.txt', 'a+')
-			g.write(book_name + '\n' + book_link + '\n')
+			g.write(book_name +'\n' + original_line+'\n')
 			g.close()
 			print('Escaped')
 			print(book_name)
-
-
 
 	f.close()
 
 
 
 def download_books():
-	
 	threads =[]
 
 	length = len(os.listdir(packet_path))
@@ -127,7 +137,7 @@ def download_books():
 		 pack = os.path.join(packet_path,'Packet ' + str(x) + '.txt')
 		 file = open(pack,'r')
 
-		 thread = threading.Thread(target=copy_books,args=(file,))
+		 thread = threading.Thread(target=copy_books,args=(file,x))
 		 thread.start()
 		 threads.append(thread)
 
@@ -148,7 +158,6 @@ def download_books():
 
 	for thread in threads :
 		 thread.join()
-
 
 #page_number = int(get_page_number())
 
