@@ -159,12 +159,8 @@ def download_books():
 	for thread in threads :
 		 thread.join()
 
-<<<<<<< HEAD
-#page_number = int(get_page_number())
-=======
 
 page_number = int(get_page_number())
->>>>>>> 194463ef2cfd00052f6c6f152920e00c4eb222d9
 
 get_book_links(page_number)
 
